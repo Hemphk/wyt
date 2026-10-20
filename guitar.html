@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>吉他 · 乐器百科</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23C97B3D'/%3E%3Cpath d='M11 22.5c3.5-1 6-3.5 7-7.5.6-2.4 2.2-3.6 4-3.6' stroke='%23F5E9D8' stroke-width='2.2' fill='none' stroke-linecap='round'/%3E%3Ccircle cx='22' cy='11.4' r='1.8' fill='%23F5E9D8'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#241709;
+    --bg2:#1B1106;
+    --panel:#33210F;
+    --ink:#F5E9D8;
+    --ink-2:#C9B28F;
+    --accent:#E0A458;
+    --accent-deep:#C97B3D;
+    --line:rgba(224,164,88,.22);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:
+      radial-gradient(120% 60% at 50% -10%, #3A2713 0%, var(--bg) 55%, var(--bg2) 100%);
+    color:var(--ink);
+    font-family:"PingFang SC","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    line-height:1.7;
+    padding:0 20px 48px;
+  }
+  .wrap{max-width:640px;margin:0 auto}
+
+  /* ===== Hero ===== */
+  header{padding:34px 0 6px}
+  .kicker{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:13px;letter-spacing:.14em;color:var(--accent);
+    border:1px solid var(--line);border-radius:999px;
+    padding:5px 14px;margin-bottom:18px;
+  }
+  .kicker svg{width:13px;height:13px;flex:none}
+  h1{
+    font-family:Georgia,"Songti SC","STSong",serif;
+    font-size:44px;font-weight:700;letter-spacing:.06em;line-height:1.2;
+    margin-bottom:10px;
+  }
+  .sub{color:var(--ink-2);font-size:16px}
+  .hero-img{
+    width:100%;border-radius:18px;display:block;margin:26px 0 8px;
+    box-shadow:0 18px 50px rgba(0,0,0,.45);
+  }
+  .img-note{font-size:12px;color:var(--ink-2);opacity:.7;margin-top:8px}
+
+  /* ===== Section ===== */
+  section{margin-top:44px}
+  .sec-title{
+    font-family:Georgia,"Songti SC","STSong",serif;
+    font-size:21px;letter-spacing:.08em;color:var(--accent);
+    display:flex;align-items:baseline;gap:12px;
+    padding-bottom:12px;border-bottom:1px solid var(--line);
+    margin-bottom:16px;
+  }
+  .sec-title .cn{font-size:13px;color:var(--ink-2);letter-spacing:.2em}
+  p.body{font-size:16px;color:var(--ink)}
+  p.body + p.body{margin-top:12px}
+  em{font-style:normal;color:var(--accent)}
+
+  /* ===== 音域 ===== */
+  .range-box{
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:14px;padding:22px 18px 18px;
+  }
+  .range-meta{display:flex;justify-content:space-between;margin-bottom:10px}
+  .range-meta b{font-size:17px;color:var(--ink)}
+  .range-meta span{font-size:13px;color:var(--ink-2)}
+  .axis{
+    position:relative;height:14px;border-radius:999px;
+    background:linear-gradient(90deg,#5B4630,#8A6B45);
+  }
+  .axis::before,.axis::after{
+    content:"";position:absolute;top:50%;width:0;height:0;
+    border:7px solid transparent;
+  }
+  .axis::before{left:-8px;border-right-color:#8A6B45;transform:translateY(-50%)}
+  .axis::after{right:-8px;border-left-color:#8A6B45;transform:translateY(-50%)}
+  .active{
+    position:absolute;top:50%;transform:translateY(-50%);
+    left:8%;width:82%;height:14px;border-radius:999px;
+    background:linear-gradient(90deg,var(--accent-deep),var(--accent));
+    box-shadow:0 0 14px rgba(224,164,88,.5);
+  }
+  .marks{display:flex;justify-content:space-between;margin-top:10px;font-size:13px;color:var(--ink-2)}
+  .freqs{display:flex;justify-content:space-between;margin-top:4px;font-size:12px;color:var(--ink-2);opacity:.75}
+  .hint{margin-top:14px;font-size:13px;color:var(--ink-2);line-height:1.6}
+
+  /* ===== 拨弦试听 ===== */
+  .listen-box{
+    margin-top:18px;background:var(--panel);border:1px solid var(--line);
+    border-radius:14px;padding:18px 16px 16px;
+  }
+  .listen-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:16px}
+  .listen-head b{font-size:15px;color:var(--ink)}
+  .listen-head span{font-size:12px;color:var(--ink-2)}
+  .strings{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+  .string{
+    border:none;background:none;padding:0;cursor:pointer;
+    display:flex;flex-direction:column;align-items:center;gap:8px;
+    -webkit-tap-highlight-color:transparent;min-width:0;
+  }
+  .str{
+    width:100%;height:74px;border-radius:999px;
+    background:linear-gradient(90deg,#B98A55,#E8C99A);
+    box-shadow:0 0 6px rgba(232,201,154,.3);
+    transition:transform .12s ease;
+  }
+  .string:nth-child(1) .str{height:90px;background:linear-gradient(90deg,#63401F,#A0703A)}
+  .string:nth-child(2) .str{height:86px;background:linear-gradient(90deg,#71491F,#B37B3E)}
+  .string:nth-child(3) .str{height:82px;background:linear-gradient(90deg,#805222,#C28749)}
+  .string:nth-child(4) .str{height:79px;background:linear-gradient(90deg,#8F5C2E,#D19455)}
+  .string:nth-child(5) .str{height:76px;background:linear-gradient(90deg,#9E6636,#E0A161)}
+  .string:nth-child(6) .str{height:74px;background:linear-gradient(90deg,#AD713F,#EFB272)}
+  .string:active .str{transform:scaleX(1.12)}
+  .string.sounding .str{animation:str .4s ease}
+  @keyframes str{
+    0%{transform:scaleX(1.22)}
+    40%{transform:scaleX(.94)}
+    100%{transform:scaleX(1)}
+  }
+  .string b{font-size:12px;color:var(--ink)}
+  .string small{font-size:10px;color:var(--ink-2)}
+
+  /* ===== 乐曲试听 ===== */
+  .work{transition:border-color .2s ease, box-shadow .2s ease}
+  .work.playing{border-left-color:var(--accent);border-color:var(--accent);box-shadow:0 0 0 1px var(--line)}
+  .play-btn{
+    margin-top:12px;display:inline-flex;align-items:center;gap:8px;
+    border:1px solid var(--line);background:transparent;color:var(--accent);
+    border-radius:999px;padding:8px 16px;font-size:14px;cursor:pointer;
+    -webkit-tap-highlight-color:transparent;transition:background .15s ease,color .15s ease;
+  }
+  .play-btn svg{width:14px;height:14px;flex:none}
+  .play-btn:hover{background:rgba(224,164,88,.12)}
+  .play-btn.playing{background:var(--accent-deep);color:#241709;border-color:var(--accent-deep)}
+  .play-tip{margin-top:12px;font-size:12px;color:var(--ink-2);opacity:.75}
+
+  /* ===== 名作 ===== */
+  .work{
+    background:var(--panel);border:1px solid var(--line);
+    border-left:3px solid var(--accent-deep);
+    border-radius:12px;padding:16px 18px;margin-bottom:12px;
+  }
+  .work h4{font-size:17px;color:var(--ink);font-weight:600;margin-bottom:4px}
+  .work .meta{font-size:13px;color:var(--accent);margin-bottom:6px}
+  .work p{font-size:14px;color:var(--ink-2)}
+
+  /* ===== Footer ===== */
+  footer{
+    margin-top:52px;padding-top:20px;border-top:1px solid var(--line);
+    display:flex;align-items:center;gap:10px;
+    font-size:13px;color:var(--ink-2);opacity:.85;
+  }
+  footer svg{width:15px;height:15px;flex:none;color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <span class="kicker">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      弹拨弦鸣乐器
+    </span>
+    <h1>吉他</h1>
+    <p class="sub">Guitar · 六弦 · 指尖上的乐队</p>
+    <img class="hero-img" src="guitar.jpg" alt="民谣吉他实拍">
+    <p class="img-note">民谣吉他（原声钢弦吉他）</p>
+  </header>
+
+  <section>
+    <h2 class="sec-title">乐器简介<span class="cn">ABOUT</span></h2>
+    <p class="body">吉他属于<em>弹拨弦鸣乐器</em>，依靠手指或拨片拨动琴弦，引起面板与琴箱共鸣发声。常见两大类：<em>民谣吉他</em>配钢弦，音色明亮通透，适合弹唱与流行、摇滚；<em>古典吉他</em>配尼龙弦，音色圆润温暖，多用于独奏与古典作品。</p>
+    <p class="body">它既能独自撑起一段旋律，也能为演唱伴奏，横跨古典、民谣、流行、摇滚与爵士，是当今世界上<em>普及度最高</em>的乐器之一。</p>
+  </section>
+
+  <section>
+    <h2 class="sec-title">能发出什么音<span class="cn">RANGE</span></h2>
+    <div class="range-box">
+      <div class="range-meta">
+        <b>E2 ～ E6</b>
+        <span>约三个半八度</span>
+      </div>
+      <div class="axis">
+        <div class="active"></div>
+      </div>
+      <div class="marks">
+        <span>E2</span><span>C4（中央C）</span><span>E6</span>
+      </div>
+      <div class="freqs">
+        <span>82.4 Hz</span><span>261.6 Hz</span><span>1318.5 Hz</span>
+      </div>
+      <p class="hint">标准调弦（EADGBE）下，最低音为第六弦空弦 E2，向上跨越约三个半八度至高音 E6。音域可随调弦与技巧（如泛音）进一步拓展。</p>
+    </div>
+    <div class="listen-box">
+      <div class="listen-head">
+        <b>拨弦试听</b>
+        <span>点击琴弦听声音</span>
+      </div>
+      <div class="strings" id="strings">
+        <button class="string" type="button" data-freq="82.41"><span class="str"></span><b>E2</b><small>6弦</small></button>
+        <button class="string" type="button" data-freq="110.00"><span class="str"></span><b>A2</b><small>5弦</small></button>
+        <button class="string" type="button" data-freq="146.83"><span class="str"></span><b>D3</b><small>4弦</small></button>
+        <button class="string" type="button" data-freq="196.00"><span class="str"></span><b>G3</b><small>3弦</small></button>
+        <button class="string" type="button" data-freq="246.94"><span class="str"></span><b>B3</b><small>2弦</small></button>
+        <button class="string" type="button" data-freq="329.63"><span class="str"></span><b>E4</b><small>1弦</small></button>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">著名作品<span class="cn">REPERTOIRE</span></h2>
+    <div class="work" data-key="romance">
+      <h4>《爱的罗曼史》</h4>
+      <div class="meta">西班牙民谣 · 吉他入门必弹</div>
+      <p>旋律温柔抒情，是无数人弹吉他的第一首曲子，也常见于电影配乐。</p>
+      <button class="play-btn" type="button" data-work="romance">
+        <svg class="ico-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="ico-stop" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+        <span class="play-label">播放旋律</span>
+      </button>
+    </div>
+    <div class="work" data-key="alhambra">
+      <h4>《阿尔罕布拉宫的回忆》</h4>
+      <div class="meta">塔雷加 · 古典吉他轮指名曲</div>
+      <p>用连续快速的轮指描绘摩尔人宫殿的黄昏回忆，被誉为“吉他演奏家的试金石”。</p>
+      <button class="play-btn" type="button" data-work="alhambra">
+        <svg class="ico-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="ico-stop" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+        <span class="play-label">播放旋律</span>
+      </button>
+    </div>
+    <div class="work" data-key="asturias">
+      <h4>《阿斯图里亚斯的传奇》</h4>
+      <div class="meta">阿尔贝尼兹 · 改编自钢琴曲</div>
+      <p>炽烈奔放的西班牙风情，民谣与古典吉他演奏中都极具表现力。</p>
+      <button class="play-btn" type="button" data-work="asturias">
+        <svg class="ico-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        <svg class="ico-stop" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="6" y="6" width="12" height="12" rx="1"/></svg>
+        <span class="play-label">播放旋律</span>
+      </button>
+    </div>
+    <p class="play-tip">试听为吉他音色合成的简化主旋律，用于感受乐曲氛围。</p>
+  </section>
+
+  <footer>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+    NFC 乐器识别 · 课程项目 · 轻触标签打开本页
+  </footer>
+
+</div>
+<script>
+(function(){
+  var ctx=null, last=null;
+  function ensureAudio(){
+    if(!ctx){
+      try{ ctx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return null; }
+    }
+    if(ctx.state==='suspended'){ ctx.resume(); }
+    return ctx;
+  }
+  /* Karplus-Strong 拨弦合成：模拟吉他弦振动 */
+  function pluckAt(freq, when){
+    var ac=ensureAudio(); if(!ac) return null;
+    var sr=ac.sampleRate, dur=2.8;
+    var N=Math.max(2,Math.round(sr/freq));
+    var total=Math.floor(sr*dur);
+    var buf=ac.createBuffer(1,total,sr);
+    var data=buf.getChannelData(0);
+    var delay=new Float32Array(N);
+    for(var i=0;i<N;i++){ delay[i]=(Math.random()*2-1)*0.85; }
+    var idx=0;
+    for(var i=0;i<total;i++){
+      var cur=delay[idx];
+      data[i]=cur;
+      var prev=delay[(idx+N-1)%N];
+      delay[idx]=(cur+prev)*0.5*0.9965;
+      idx=(idx+1)%N;
+    }
+    var src=ac.createBufferSource();
+    src.buffer=buf;
+    var g=ac.createGain();
+    g.gain.value=0.9;
+    src.connect(g); g.connect(ac.destination);
+    src.start(when);
+    return src;
+  }
+  var strings=document.querySelectorAll('.string');
+  Array.prototype.forEach.call(strings,function(s){
+    s.addEventListener('click',function(){
+      var f=parseFloat(s.getAttribute('data-freq'));
+      if(!isNaN(f)){
+        var ac=ensureAudio();
+        if(ac){ pluckAt(f, ac.currentTime+0.02); }
+      }
+      if(last && last!==s){ last.classList.remove('sounding'); }
+      s.classList.remove('sounding');
+      void s.offsetWidth;
+      s.classList.add('sounding');
+      last=s;
+    });
+  });
+
+  /* ===== 乐曲旋律试听 ===== */
+  var NOTE_FREQ={
+    'E4':329.63,'F#4':369.99,'G4':392.00,'A4':440.00,
+    'B4':493.88,'C5':523.25,'C#5':554.37,'D5':587.33,
+    'E5':659.26,'F#5':739.99,'G5':783.99,'A5':880.00,'B5':987.77
+  };
+  var WORKS={
+    romance:{
+      bpm:104,
+      notes:['E5','B4','C5','B4','A4','B4','G4','F#4','G4','A4','B4','C5','B4','A4','G4','E4']
+    },
+    alhambra:{
+      bpm:116,
+      notes:['D5','E5','F#5','A5','G5','F#5','E5','D5','E5','F#5','G5','B5','A5','G5','F#5','E5']
+    },
+    asturias:{
+      bpm:150,
+      notes:['E5','E5','E5','E5','E5','E5','E5','E5','G5','G5','G5','G5','F#5','F#5','F#5','F#5','E5','E5','E5','E5','D5','D5','D5','D5','C#5','C#5','C#5','C#5','B4','B4','B4','B4']
+    }
+  };
+  var playing=null;
+  function stopPlay(){
+    if(playing){
+      playing.srcs.forEach(function(s){ try{ s.stop(); }catch(e){} });
+      playing=null;
+    }
+  }
+  function setBtn(key,on){
+    var btn=document.querySelector('.play-btn[data-work="'+key+'"]');
+    if(!btn) return;
+    btn.classList.toggle('playing',on);
+    var p=btn.querySelector('.ico-play'), s=btn.querySelector('.ico-stop'), l=btn.querySelector('.play-label');
+    if(p){ p.style.display=on?'none':''; }
+    if(s){ s.style.display=on?'':'none'; }
+    if(l){ l.textContent=on?'停止播放':'播放旋律'; }
+    var card=btn.closest('.work');
+    if(card){ card.classList.toggle('playing',on); }
+  }
+  function playWork(key){
+    var ac=ensureAudio(); if(!ac) return;
+    if(playing && playing.key===key){ stopPlay(); setBtn(key,false); return; }
+    stopPlay();
+    var w=WORKS[key]; if(!w) return;
+    var beat=60/w.bpm;
+    var t=ac.currentTime+0.08;
+    var srcs=[];
+    w.notes.forEach(function(n){
+      var f=NOTE_FREQ[n];
+      if(f){
+        var s=pluckAt(f,t);
+        if(s){ srcs.push(s); }
+      }
+      t+=beat;
+    });
+    var totalMs=(t-ac.currentTime)*1000+400;
+    playing={key:key,srcs:srcs};
+    setBtn(key,true);
+    var self=playing;
+    setTimeout(function(){
+      if(playing===self){ stopPlay(); setBtn(key,false); }
+    },totalMs);
+  }
+  var playBtns=document.querySelectorAll('.play-btn');
+  Array.prototype.forEach.call(playBtns,function(b){
+    b.addEventListener('click',function(){ playWork(b.getAttribute('data-work')); });
+  });
+})();
+</script>
+</body>
+</html>
